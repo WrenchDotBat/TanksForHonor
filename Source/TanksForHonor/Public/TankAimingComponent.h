@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "TankAimingComponent.generated.h"
 
+class UTankBarrel;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TANKSFORHONOR_API UTankAimingComponent : public UActorComponent
@@ -24,6 +26,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AimAt(FVector AimLocation);
+	void SetBarrel(UTankBarrel* BarrelToSet);
+
+	void AimAt(FVector AimLocation, float LaunchSpeed);
+
+private:
+	UTankBarrel* Barrel = nullptr;
 	
+	void MoveBarrel(FVector AimDirection);
 };

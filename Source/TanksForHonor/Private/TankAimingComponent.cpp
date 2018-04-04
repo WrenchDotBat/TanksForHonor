@@ -1,6 +1,8 @@
 // Iozhik inc 2018. All rights reserved
 
 #include "TankAimingComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "TankBarrel.h"
 
 
 // Sets default values for this component's properties
@@ -32,9 +34,34 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UTankAimingComponent::AimAt(FVector AimLocation)
+void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)
 {
-	auto OurTankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *OurTankName, *AimLocation.ToString());
+	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed)
+{
+	if (!Barrel) return;
+	FVector OutLaunchVelocity = FVector(1.f);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Socket"));
+	if (UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		AimLocation,
+		LaunchSpeed,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	)
+		)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Aiming: %s"), *AimDirection);
+		MoveBarrel(OutLaunchVelocity.GetSafeNormal());
+	}
+	//auto OurTankName = GetOwner()->GetName();
+}
+
+void UTankAimingComponent::MoveBarrel(FVector AimDirection)
+{
+	Barrel->Elevate(5.f);
 }
 

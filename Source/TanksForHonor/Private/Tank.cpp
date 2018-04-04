@@ -1,6 +1,7 @@
 // Iozhik inc 2018. All rights reserved
 
 #include "Tank.h"
+#include "TankBarrel.h"
 
 
 // Sets default values
@@ -20,7 +21,12 @@ void ATank::BeginPlay()
 
 void ATank::AimAt(FVector HitLocation)
 {
-	TankAimingComponent->AimAt(HitLocation);
+	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+}
+
+void ATank::SetBarrelRef(UTankBarrel * BarrelToSet)
+{
+	TankAimingComponent->SetBarrel(BarrelToSet);
 }
 
 // Called every frame
