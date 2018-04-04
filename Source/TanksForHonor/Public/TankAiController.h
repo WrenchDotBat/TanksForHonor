@@ -16,6 +16,8 @@ class TANKSFORHONOR_API ATankAiController : public AAIController
 	GENERATED_BODY()
 
 public:
+	virtual void Tick(float DeltaTime) override;
+
 	virtual void BeginPlay() override;
 
 	ATank* GetTankAiController() const;
