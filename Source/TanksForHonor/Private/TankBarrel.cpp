@@ -2,9 +2,10 @@
 
 #include "TankBarrel.h"
 
-void UTankBarrel::Elevate(float Degrees)
+void UTankBarrel::Elevate(float RelativeSpeed)
 {
-
+	auto CurrentTime = GetWorld()->GetTimeSeconds();
+	UE_LOG(LogTemp, Warning, TEXT("Elevating %f at %f"), RelativeSpeed, CurrentTime);
 }
 
 
