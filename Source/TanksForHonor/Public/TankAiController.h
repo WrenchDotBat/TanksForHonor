@@ -17,13 +17,12 @@ class TANKSFORHONOR_API ATankAiController : public AAIController
 {
 	GENERATED_BODY()
 
+private:
+	ATank* AiTank = nullptr;
+	ATank* PlayerTank = nullptr;
+
 public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay() override;
-
-	ATank* GetTank() const;
-	
-	ATank* GetPlayerController() const;
-	
 };
