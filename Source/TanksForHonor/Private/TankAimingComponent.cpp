@@ -2,7 +2,9 @@
 
 #include "TankAimingComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 
 // Sets default values for this component's properties
@@ -10,7 +12,7 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -26,23 +28,23 @@ void UTankAimingComponent::BeginPlay()
 }
 
 
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)
 {
+	if (!BarrelToSet) return;
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurret(UTankTurret * TurretToSet)
+{
+	if (!TurretToSet) return;
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed)
 {
 	if (!Barrel) return;
-	FVector OutLaunchVelocity = FVector(1.f);
+	//UE_LOG(LogTemp, Warning, TEXT("Located at: %s"), *AimLocation.ToString());
+	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	if (UGameplayStatics::SuggestProjectileVelocity(
 		this,
@@ -50,11 +52,14 @@ void UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed)
 		StartLocation,
 		AimLocation,
 		LaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	)
 		)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Aiming: %s"), *AimDirection);
+		//DrawDebugLine(GetWorld(), StartLocation, AimLocation, FColor(0, 128, 0), false, 0.f, 0.f, 10.f);
 		MoveBarrel(OutLaunchVelocity.GetSafeNormal());
 	}
 	//auto OurTankName = GetOwner()->GetName();
@@ -62,6 +67,11 @@ void UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed)
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
-	Barrel->Elevate(5.f);
+	//UE_LOG(LogTemp, Warning, TEXT("Located at: %s"), *AimDirection.ToString());
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	Barrel->Elevate(DeltaRotator.Pitch);
+	Turret->Rotate(DeltaRotator.Yaw);
 }
 

@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "Tank.h"
+//#include "Tank.h" TODO DELETE
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "TankAiController.generated.h"
+
+class ATank;
 
 /**
  * 
@@ -20,7 +22,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	ATank* GetTankAiController() const;
+	ATank* GetTank() const;
 	
 	ATank* GetPlayerController() const;
 	

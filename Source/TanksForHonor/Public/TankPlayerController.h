@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "Tank.h"
+//#include "Tank.h" TODO DELETE
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
+
+class ATank;
 
 /**
  * 
@@ -17,10 +19,10 @@ class TANKSFORHONOR_API ATankPlayerController : public APlayerController
 
 public:
 	UPROPERTY(EditAnywhere)
-		int32 ScreenCrossHairLocationY = 0.33333f;
+		float ScreenCrossHairLocationY = 0.33333f;
 
 	UPROPERTY(EditAnywhere)
-		int32 ScreenCrossHairLocationX = 0.5f;
+		float ScreenCrossHairLocationX = 0.5f;
 
 	UPROPERTY(EditAnywhere)
 		float LineTraceRange = 1000000.f;
@@ -29,14 +31,14 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	ATank* GetTankPlayerController() const;
+	ATank* GetTank() const;
 
 	void AimTowardsCrosshair();
 
-	bool GetSightRayHitLocation(FVector& HitLocation);
+	bool GetSightRayHitLocation(FVector& HitLocation) const;
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& WorldDirection) const;
 
-	bool GetLookVectorHitLocation(FVector LookDirection, FVector & HitLocation);
+	bool GetLookVectorHitLocation(FVector LookDirection, FVector & HitLocation) const;
 	
 };

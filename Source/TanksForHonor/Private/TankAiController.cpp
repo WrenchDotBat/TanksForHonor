@@ -1,12 +1,13 @@
 // Iozhik inc 2018. All rights reserved
 
 #include "TankAiController.h"
+#include "Tank.h"
 
 
 void ATankAiController::BeginPlay() 
 {
 	Super::BeginPlay();
-	auto AiTank = GetTankAiController();
+	auto AiTank = GetTank();
 	auto PlayerTank = GetPlayerController();
 	if (!AiTank) 
 	{
@@ -31,11 +32,12 @@ void ATankAiController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (GetPlayerController())
 	{
-		GetTankAiController()->AimAt(GetPlayerController()->GetActorLocation());
+		GetTank()->AimAt(GetPlayerController()->GetActorLocation());
+		GetTank()->Fire();
 	}
 }
 
-ATank* ATankAiController::GetTankAiController() const
+ATank* ATankAiController::GetTank() const
 {
 	return Cast<ATank>(GetPawn());
 }

@@ -1,11 +1,12 @@
 // Iozhik inc 2018. All rights reserved
 
 #include "TankPlayerController.h"
+#include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto tempTank = GetTankPlayerController();
+	auto tempTank = GetTank();
 	if (!tempTank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Tank player controller not found"));
@@ -23,24 +24,24 @@ void ATankPlayerController::Tick(float DeltaTime)
 	//UE_LOG(LogTemp, Warning, TEXT("TICK"));
 }
 
-ATank* ATankPlayerController::GetTankPlayerController() const
+ATank* ATankPlayerController::GetTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetTankPlayerController()) return;
+	if (!GetTank()) return;
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetTankPlayerController()->AimAt(HitLocation);
+		GetTank()->AimAt(HitLocation);
 		//UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *HitLocation.ToString());
 	}
 }
 
-bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
+bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 {
 	int32 ViewportX, ViewportY;
 	GetViewportSize(ViewportX, ViewportY);
@@ -50,7 +51,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		GetLookVectorHitLocation(LookDirection, HitLocation);
-		//UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *LookDirection.ToString());
 	}
 	return true;
 }
@@ -61,7 +61,7 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& 
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection);
 }
 
-bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation)
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
 {
 	FHitResult HitResult;
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
