@@ -10,6 +10,7 @@ class AProjectile;
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
+class UTankMovementComponent;
 
 UCLASS()
 class TANKSFORHONOR_API ATank : public APawn
@@ -26,24 +27,27 @@ protected:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-private: 
-	UTankBarrel*  barrel = nullptr;
+	UPROPERTY(BlueprintReadOnly, Category = Setup)
+		UTankMovementComponent* TankMovementComponent = nullptr;
+
+private:
+	UTankBarrel * barrel = nullptr;
 	float LastFireTime = 0.f;
 
-public:	
+public:
 	void AimAt(FVector HitLocation);
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 		float ReloadTime = 3.f;
 
 	UFUNCTION(BlueprintCallable, Category = Controls)
-	void Fire();
+		void Fire();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelRef(UTankBarrel* BarrelToSet);
+		void SetBarrelRef(UTankBarrel* BarrelToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretRef(UTankTurret* TurretToSet);
+		void SetTurretRef(UTankTurret* TurretToSet);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -53,5 +57,5 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 10000.f;
-	
+
 };
