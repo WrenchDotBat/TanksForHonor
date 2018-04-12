@@ -18,22 +18,4 @@ void ATank::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATank::Fire()
-{
-	if (!ensure(Barrel)) return;
-	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTime; 
-	if (isReloaded) {
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBlueprint,
-			Barrel->GetSocketLocation(FName("Projectile")),
-			Barrel->GetSocketRotation(FName("Projectile"))
-			);
-		if (!ensure(Projectile)) {
-			UE_LOG(LogTemp, Error, TEXT("Projectile_BP not set"));
-			return;
-		}
-		Projectile->Launch(LaunchSpeed);
-		LastFireTime = GetWorld()->GetTimeSeconds();
-	}
-}
 
