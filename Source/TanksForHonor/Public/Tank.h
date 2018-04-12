@@ -8,8 +8,6 @@
 
 class AProjectile;
 class UTankBarrel;
-class UTankTurret;
-class UTankAimingComponent;
 
 UCLASS()
 class TANKSFORHONOR_API ATank : public APawn
@@ -24,15 +22,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-		UTankAimingComponent* TankAimingComponent = nullptr;
-
 private:
 	float LastFireTime = 0.f;
 
 public:
-	void AimAt(FVector HitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = "Controls")
 		void Fire();
 
