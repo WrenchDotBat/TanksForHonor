@@ -1,20 +1,15 @@
 // Iozhik inc 2018. All rights reserved
 
 #include "TankPlayerController.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto tempTank = GetTank();
-	if (!tempTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank player controller not found"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank player controller: %s"), *(tempTank->GetName()));
-	}
+	auto AimingComponent = GetTank()->FindComponentByClass<UTankAimingComponent>();
+	if (AimingComponent)
+		FoundAimingComponent(AimingComponent);
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -31,13 +26,12 @@ ATank* ATankPlayerController::GetTank() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetTank()) return;
+	if (!ensure(GetTank())) return;
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
 		GetTank()->AimAt(HitLocation);
-		//UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *HitLocation.ToString());
 	}
 }
 
@@ -55,7 +49,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	return true;
 }
 
-bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& WorldDirection) const 
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& WorldDirection) const
 {
 	FVector WorldLocation;
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection);
@@ -71,7 +65,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		StartLocation,
 		EndLocation,
 		ECollisionChannel::ECC_Visibility
-		))
+	))
 	{
 		HitLocation = HitResult.Location;
 		return true;

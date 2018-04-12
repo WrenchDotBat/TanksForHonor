@@ -28,22 +28,16 @@ void UTankAimingComponent::BeginPlay()
 }
 
 
-void UTankAimingComponent::SetBarrel(UTankBarrel * BarrelToSet)
+void UTankAimingComponent::Init(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
-	if (!BarrelToSet) return;
+	if (!ensure(BarrelToSet && TurretToSet)) return;
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurret(UTankTurret * TurretToSet)
-{
-	if (!TurretToSet) return;
 	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed)
 {
-	if (!Barrel) return;
-	//UE_LOG(LogTemp, Warning, TEXT("Located at: %s"), *AimLocation.ToString());
+	if (!ensure(Barrel)) return;
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	if (UGameplayStatics::SuggestProjectileVelocity(
@@ -62,12 +56,11 @@ void UTankAimingComponent::AimAt(FVector AimLocation, float LaunchSpeed)
 		//DrawDebugLine(GetWorld(), StartLocation, AimLocation, FColor(0, 128, 0), false, 0.f, 0.f, 10.f);
 		MoveBarrel(OutLaunchVelocity.GetSafeNormal());
 	}
-	//auto OurTankName = GetOwner()->GetName();
 }
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Located at: %s"), *AimDirection.ToString());
+	if (!ensure(Barrel && Turret)) return;
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;

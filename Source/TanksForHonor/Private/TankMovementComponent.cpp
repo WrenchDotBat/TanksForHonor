@@ -20,12 +20,14 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	auto MoveVelocityNormal = MoveVelocity.GetSafeNormal();
 	
-	MoveForward(FVector::DotProduct(MoveVelocityNormal, TankForward));
+	MoveForward(FVector::DotProduct(TankForward, MoveVelocityNormal));
+
+	MoveRight(FVector::CrossProduct(TankForward, MoveVelocityNormal).Z);
 }
 
 void UTankMovementComponent::Init(UTankTrack* LeftToSet, UTankTrack* RightToSet)
 {
-	if (!LeftToSet || !RightToSet) return;
+	if (!ensure(LeftToSet && RightToSet)) return;
 	LeftTrack = LeftToSet;
 	RightTrack = RightToSet;
 }

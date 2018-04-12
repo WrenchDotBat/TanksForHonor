@@ -10,7 +10,6 @@ class AProjectile;
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
-class UTankMovementComponent;
 
 UCLASS()
 class TANKSFORHONOR_API ATank : public APawn
@@ -25,37 +24,27 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UTankAimingComponent* TankAimingComponent = nullptr;
-
-	UPROPERTY(BlueprintReadOnly, Category = Setup)
-		UTankMovementComponent* TankMovementComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly, Category = "Setup")
+		UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
-	UTankBarrel * barrel = nullptr;
 	float LastFireTime = 0.f;
 
 public:
 	void AimAt(FVector HitLocation);
 
-	UPROPERTY(EditAnywhere, Category = Setup)
-		float ReloadTime = 3.f;
-
-	UFUNCTION(BlueprintCallable, Category = Controls)
+	UFUNCTION(BlueprintCallable, Category = "Controls")
 		void Fire();
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetBarrelRef(UTankBarrel* BarrelToSet);
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		float ReloadTime = 3.f;
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetTurretRef(UTankTurret* TurretToSet);
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 10000.f;
+
+	UTankBarrel* Barrel = nullptr;
 
 };

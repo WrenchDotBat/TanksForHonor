@@ -10,12 +10,19 @@
 class ATank;
 
 /**
- * 
+ *
  */
 UCLASS()
 class TANKSFORHONOR_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		ATank* GetTank() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+		void FoundAimingComponent(UTankAimingComponent* AimpComp);
 
 public:
 	UPROPERTY(EditDefaultsOnly)
@@ -31,7 +38,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	ATank* GetTank() const;
 
 	void AimTowardsCrosshair();
 
@@ -40,5 +46,5 @@ public:
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& WorldDirection) const;
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector & HitLocation) const;
-	
+
 };
