@@ -6,7 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+class UParticleSystemComponent;
 class UProjectileMovementComponent;
+class URadialForceComponent;
 
 UCLASS()
 class TANKSFORHONOR_API AProjectile : public AActor
@@ -24,9 +26,23 @@ protected:
 	UProjectileMovementComponent* MovementComponent = nullptr;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	void Launch(float Speed);
-	
+
+private:
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UStaticMeshComponent * CollisionMesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UParticleSystemComponent* LaunchBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UParticleSystemComponent* ImpactBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		URadialForceComponent * ExplosionForce = nullptr;
+
 };
