@@ -15,9 +15,12 @@ class TANKSFORHONOR_API ATankAiController : public AAIController
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float AcceptanceRadius = 3000.f;
+
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
-	float AcceptanceRadius = 3000.f;
 };
