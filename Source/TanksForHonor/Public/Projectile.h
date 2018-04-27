@@ -30,6 +30,14 @@ public:
 	void Launch(float Speed);
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		float ProjectileDamage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DestroyDelay = 5.f;
+
+	void OnTimerExpire();
+
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 

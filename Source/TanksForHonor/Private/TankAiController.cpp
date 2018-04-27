@@ -14,7 +14,6 @@ void ATankAiController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto AiTank = GetPawn();
-	UE_LOG(LogTemp, Warning, TEXT("Moving called"));
 	if (!ensure(PlayerTank && AiTank)) return;
 	MoveToActor(PlayerTank, AcceptanceRadius);
 	auto AimingComponent = AiTank->FindComponentByClass<UTankAimingComponent>();

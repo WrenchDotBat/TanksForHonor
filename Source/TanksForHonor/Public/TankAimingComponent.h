@@ -72,5 +72,6 @@ private:
 
 	float LastFireTime = 0.f;
 
-	int RoundsLeft = 3;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int RoundsLeft = 10;
 };
